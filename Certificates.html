@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificates — Amir Parvizi</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        secondary: '#FF6B6B',
+                        tertiary: '#4ECDC4',
+                        accent1: '#FFD166',
+                        accent2: '#06D6A0',
+                        uae: '#077312',
+                        korea: '#5D5CDE',
+                        dark: {
+                            bg: '#181818',
+                            card: '#232323',
+                            text: '#E0E0E0'
+                        },
+                        light: {
+                            bg: '#FFFFFF',
+                            card: '#F5F5F7',
+                            text: '#1D1D1F'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['SF Pro Display', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        'oneui': '1.5rem'
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .parallax-bg {
+            transform: translateZ(-1px) scale(2);
+            z-index: -1;
+        }
+
+        .parallax-wrapper {
+            height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+            perspective: 2px;
+        }
+
+        .parallax-content {
+            transform: translateZ(0);
+        }
+
+        .section-transition {
+            position: relative;
+            transition: all 0.4s ease-out;
+        }
+
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark .text-light-text {
+            color: theme('colors.dark.text');
+        }
+
+        .dark .bg-light-card {
+            background-color: theme('colors.dark.card');
+        }
+
+        .apple-blur {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(93, 92, 222, 0.5);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(93, 92, 222, 0.8);
+        }
+
+        .magic-cursor {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            border: 2px solid #5D5CDE;
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: transform 0.1s ease;
+            opacity: 0;
+        }
+
+        @media (pointer: fine) {
+            .magic-cursor {
+                opacity: 1;
+            }
+        }
+
+        .certificate-item {
+            transition: all 0.5s ease;
+        }
+
+        .certificate-item.hidden {
+            opacity: 0;
+            transform: scale(0.8);
+            height: 0;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .filter-btn.active {
+            background-color: var(--active-color, #5D5CDE);
+            color: white;
+        }
+
+        .flag-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.5rem;
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+
+<body class="bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text font-sans overflow-x-hidden relative">
+    <div class="magic-cursor"></div>
+
+    <nav class="fixed w-full z-50 apple-blur bg-white/80 dark:bg-dark-bg/80 transition-all duration-300">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-xl font-bold text-primary">Mostafa Ataee</a>
+
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="index.html" class="nav-link font-medium hover:text-primary transition-colors">Home</a>
+                <a href="jobExperience.html" class="nav-link font-medium text-primary transition-colors">Job Experience</a>
+                <a href="Certificates.html" class="nav-link font-medium text-primary transition-colors">Certificates</a>
+                <a href="Teaching.html" class="nav-link font-medium hover:text-primary transition-colors">Teaching</a>
+                <a href="Articles.html" class="nav-link font-medium hover:text-primary transition-colors">Articles</a>
+                <a href="Competitions.html" class="nav-link font-medium hover:text-primary transition-colors">Competitions</a>
+                <a href="Network.html" class="nav-link font-medium hover:text-primary transition-colors">Global Network</a>
+                <a href="Colleagues.html" class="nav-link font-medium hover:text-primary transition-colors">Professional Network</a>
+                <a href="Contact.html" class="nav-link font-medium hover:text-primary transition-colors">Get in Touch</a>
+                <button id="theme-toggle" class="p-2 rounded-full bg-light-card dark:bg-dark-card">
+                    <i class="fas fa-moon dark:hidden"></i>
+                    <i class="fas fa-sun hidden dark:block"></i>
+                </button>
+            </div>
+
+            <button id="mobile-menu-button" class="md:hidden p-2 rounded-full bg-light-card dark:bg-dark-card">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-dark-bg apple-blur absolute w-full">
+            <div class="container mx-auto px-6 py-4 flex flex-col space-y-4">
+                <a href="index.html" class="font-medium p-2 rounded-oneui hover:bg-light-card dark:hover:bg-dark-card transition-colors">Home</a>
+                <a href="jobExperience.html" class="nav-link font-medium text-primary transition-colors">Job Experience</a>
+                <a href="Certificates.html" class="font-medium p-2 rounded-oneui bg-light-card dark:hover:bg-dark-card transition-colors">Certificates</a>
+                <a href="Teaching.html" class="font-medium p-2 rounded-oneui hover:bg-light-card dark:hover:bg-dark-card transition-colors">Teaching</a>
+                <a href="Articles.html" class="font-medium p-2 rounded-oneui hover:bg-light-card dark:hover:bg-dark-card transition-colors">Articles</a>
+                <a href="Competitions.html" class="font-medium p-2 rounded-oneui hover:bg-light-card dark:hover:bg-dark-card transition-colors">Competitions</a>
+                <a href="Network.html" class="font-medium p-2 rounded-oneui hover:bg-light-card dark:hover:bg-dark-card transition-colors">Global Network</a>
+                <a href="Colleagues.html" class="nav-link font-medium hover:text-primary transition-colors">Professional Network</a>
+                <a href="Contact.html" class="nav-link font-medium hover:text-primary transition-colors">Get in Touch</a>
+                <div class="flex justify-between items-center p-2">
+                    <span>Theme</span>
+                    <button id="mobile-theme-toggle" class="p-2 rounded-full bg-light-card dark:bg-dark-card">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="parallax-wrapper">
+        <section class="pt-32 pb-16 relative">
+            <div class="absolute inset-0 overflow-hidden z-0">
+                <div class="parallax-bg absolute inset-0 bg-gradient-to-br from-primary/10 to-secondary/10"></div>
+                <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-primary/20 rounded-full blur-3xl"></div>
+                <div class="absolute top-24 -left-24 w-80 h-80 bg-secondary/20 rounded-full blur-3xl"></div>
+            </div>
+
+            <div class="container mx-auto px-6 z-10 parallax-content">
+                <div class="section-title mb-12 text-center">
+                    <h1 class="text-4xl md:text-5xl font-bold">Professional <span class="text-primary">Certificates</span></h1>
+                    <div class="w-16 h-1 bg-primary mx-auto mt-4"></div>
+                </div>
+
+                <p class="text-xl text-center max-w-3xl mx-auto mb-12">
+                    I've earned professional certificates from leading institutions across the globe, enhancing my expertise in machine learning, artificial intelligence, computational neuroscience, and related technologies.
+                </p>
+            </div>
+        </section>
+
+        <section class="py-8 bg-light-card dark:bg-dark-card relative">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-wrap justify-center gap-4 mb-8">
+                    <button class="filter-btn active px-6 py-2 rounded-full bg-primary text-white" data-filter="all" style="--active-color: #5D5CDE">
+                        All Certificates
+                    </button>
+                    <button class="filter-btn px-6 py-2 rounded-full bg-white dark:bg-dark-bg" data-filter="iran" style="--active-color: #CC0000">
+                        <span class="flag-icon bg-red-100">🇮🇷</span>Iran
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-16 relative">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                    <!-- Certificate: LPIC-1 -->
+                    <div class="certificate-item bg-white dark:bg-dark-bg rounded-oneui overflow-hidden shadow-lg hover-lift section-transition"
+                        data-category="iran">
+                        <div class="h-12 flex items-center px-6" style="background-color: #CC0000;">
+                            <span class="flag-icon bg-white/20 text-white">🇮🇷</span>
+                            <span class="text-white font-bold">Fanavaran Anisa</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">Linux Professional Institute Certification — LPIC-1</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">Issued May 2023</p>
+                            <p class="mb-4">Industry-recognized Linux certification covering system architecture, Linux installation and package management, GNU and Unix commands, devices, filesystems, and shell scripting.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="px-3 py-1 text-sm rounded-full" style="background-color: rgba(204,0,0,0.15); color: #CC0000;">Professional</span>
+                                <a href="https://www.linkedin.com/in/ataee-mostafa/overlay/364722019/skill-associations-details/" class="text-primary hover:underline">View Certificate</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Certificate: Embedded System -->
+                    <div class="certificate-item bg-white dark:bg-dark-bg rounded-oneui overflow-hidden shadow-lg hover-lift section-transition"
+                        data-category="iran">
+                        <div class="h-12 flex items-center px-6" style="background-color: #CC0000;">
+                            <span class="flag-icon bg-white/20 text-white">🇮🇷</span>
+                            <span class="text-white font-bold">Fanavaran Anisa</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">Embedded System</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">Issued Jul 2023</p>
+                            <p class="mb-4">Hands-on embedded systems program covering Raspberry Pi hardware, home automation design, and integration with GSM modules (SIM800) for IoT and smart-home applications.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="px-3 py-1 text-sm rounded-full" style="background-color: rgba(204,0,0,0.15); color: #CC0000;">Technical</span>
+                                <a href="https://www.linkedin.com/in/ataee-mostafa/overlay/364659736/skill-associations-details/" class="text-primary hover:underline">View Certificate</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Certificate: IELTS General -->
+                    <div class="certificate-item bg-white dark:bg-dark-bg rounded-oneui overflow-hidden shadow-lg hover-lift section-transition"
+                        data-category="iran">
+                        <div class="h-12 flex items-center px-6" style="background-color: #CC0000;">
+                            <span class="flag-icon bg-white/20 text-white">🇮🇷</span>
+                            <span class="text-white font-bold">IRSAFAM INSTITUTE</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">IELTS — General Training (Band 6.0)</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">Issued Jan 2018 · Expired Jan 2020</p>
+                            <p class="mb-4">International English Language Testing System — General Training module, assessing listening, reading, writing, and speaking proficiency for migration and workplace purposes. Achieved Band 6.0 out of 9.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="px-3 py-1 text-sm rounded-full" style="background-color: rgba(204,0,0,0.15); color: #CC0000;">Language</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Certificate: TTC -->
+                    <div class="certificate-item bg-white dark:bg-dark-bg rounded-oneui overflow-hidden shadow-lg hover-lift section-transition"
+                        data-category="iran">
+                        <div class="h-12 flex items-center px-6" style="background-color: #CC0000;">
+                            <span class="flag-icon bg-white/20 text-white">🇮🇷</span>
+                            <span class="text-white font-bold">Nassir Institute</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">TTC — English Teacher Training Course</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">Issued Oct 2018</p>
+                            <p class="mb-4">Certified training program in English language pedagogy, covering lesson planning, classroom management, teaching methodologies, and practical instruction techniques for English learners.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="px-3 py-1 text-sm rounded-full" style="background-color: rgba(204,0,0,0.15); color: #CC0000;">Education</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Certificate: IELTS Academic -->
+                    <div class="certificate-item bg-white dark:bg-dark-bg rounded-oneui overflow-hidden shadow-lg hover-lift section-transition"
+                        data-category="iran">
+                        <div class="h-12 flex items-center px-6" style="background-color: #CC0000;">
+                            <span class="flag-icon bg-white/20 text-white">🇮🇷</span>
+                            <span class="text-white font-bold">IRSAFAM INSTITUTE</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">IELTS — Academic (Band 6.5)</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">Issued Jun 2021 · Expired Jun 2023</p>
+                            <p class="mb-4">International English Language Testing System — Academic module for higher education and professional registration, assessing advanced English skills across four domains. Achieved Band 6.5 out of 9.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="px-3 py-1 text-sm rounded-full" style="background-color: rgba(204,0,0,0.15); color: #CC0000;">Language</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Certificate: Supervising Electrical Engineer -->
+                    <div class="certificate-item bg-white dark:bg-dark-bg rounded-oneui overflow-hidden shadow-lg hover-lift section-transition"
+                        data-category="iran">
+                        <div class="h-12 flex items-center px-6" style="background-color: #CC0000;">
+                            <span class="flag-icon bg-white/20 text-white">🇮🇷</span>
+                            <span class="text-white font-bold">Alborz Province Construction Engineering Organization</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">Supervising Electrical Engineer License</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">Issued Mar 2016</p>
+                            <p class="mb-4">Official engineering license issued by the Alborz Province Construction Engineering Organization, authorizing the holder to supervise electrical installations and construction projects.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="px-3 py-1 text-sm rounded-full" style="background-color: rgba(204,0,0,0.15); color: #CC0000;">Engineering License</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="py-8 bg-light-card dark:bg-dark-card text-center">
+            <div class="container mx-auto px-6">
+                <p class="mb-4">© Copyright 2026.<span class="text-primary"> Mostafa Ataee</span>. All Rights Reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        function setupTheme() {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.classList.add('dark');
+            }
+
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+                if (event.matches) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            });
+
+            document.getElementById('theme-toggle').addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+            });
+
+            document.getElementById('mobile-theme-toggle').addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+            });
+        }
+
+        function setupMobileMenu() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+        }
+
+        function setupCertificateFilters() {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const certificateItems = document.querySelectorAll('.certificate-item');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => {
+                        b.classList.remove('active');
+                        b.classList.remove('bg-primary');
+                        b.classList.add('bg-white', 'dark:bg-dark-bg');
+                        b.classList.remove('text-white');
+                    });
+
+                    btn.classList.add('active');
+                    btn.classList.remove('bg-white', 'dark:bg-dark-bg');
+                    btn.classList.add('text-white');
+
+                    const filter = btn.getAttribute('data-filter');
+
+                    certificateItems.forEach(item => {
+                        const categories = item.getAttribute('data-category').split(' ');
+
+                        if (filter === 'all' || categories.includes(filter)) {
+                            item.classList.remove('hidden');
+                            setTimeout(() => {
+                                item.style.display = 'block';
+                            }, 300);
+                        } else {
+                            item.classList.add('hidden');
+                            setTimeout(() => {
+                                item.style.display = 'none';
+                            }, 300);
+                        }
+                    });
+                });
+            });
+        }
+
+        function setupMagicCursor() {
+            const cursor = document.querySelector('.magic-cursor');
+
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            });
+
+            document.addEventListener('mousedown', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(0.8)';
+            });
+
+            document.addEventListener('mouseup', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+            });
+
+            const clickables = document.querySelectorAll('a, button, input, textarea');
+            clickables.forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                    cursor.style.borderColor = 'rgba(93, 92, 222, 0.4)';
+                });
+
+                el.addEventListener('mouseleave', () => {
+                    cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                    cursor.style.borderColor = 'rgba(93, 92, 222, 1)';
+                });
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            setupTheme();
+            setupMobileMenu();
+            setupCertificateFilters();
+            setupMagicCursor();
+        });
+    </script>
+</body>
+
+</html>
