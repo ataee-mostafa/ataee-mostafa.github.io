@@ -1477,8 +1477,14 @@
                             mobileMenu.classList.add('hidden');
                         }
 
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 100,
+                        const parallaxWrapper = document.querySelector('.parallax-wrapper');
+                        const scrollContainer = parallaxWrapper || window;
+                        const targetTop = targetElement.getBoundingClientRect().top
+                            + (parallaxWrapper ? parallaxWrapper.scrollTop : window.scrollY)
+                            - 100;
+
+                        scrollContainer.scrollTo({
+                            top: targetTop,
                             behavior: 'smooth'
                         });
                     }
